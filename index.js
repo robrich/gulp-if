@@ -2,7 +2,7 @@
 
 "use strict";
 
-var through = require('through');
+var gutil = require('gulp-util');
 
 module.exports = function (doit, child) {
 	if (!child) {
@@ -12,8 +12,6 @@ module.exports = function (doit, child) {
 		return child;
 	} else {
 		// noop
-		return through(function(data){
-			this.emit('data', data);
-		});
+		return gutil.noop();
 	}
 };
