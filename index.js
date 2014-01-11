@@ -4,48 +4,54 @@
 
 var through = require('through');
 
-module.exports = function (doit, child) {
+module.exports = function (doit, child, fork) {
+
+    fork = !!fork;
+
     if (!child) {
         throw new Error('gulp-if: child action is required');
     }
 
-    // if doit is a boolean function
-    if(typeof doit === 'function') {
+    if(typeof doit !== 'boolean' && typeof doit !== 'function') {
+        throw new Error('gulp-if: first param must be boolean function/expression');
+    }
 
-        var detour = through();
-        var detour_child = detour.pipe(child);
+    if(typeof doit === 'boolean') {
+        var _bool = !!doit;
+        doit = function() {
+            return _bool;
+        };
+    }
 
-        var _write = function (file) {
+    var detour = through();
+    var detour_child = detour.pipe(child);
 
-            if(!!doit.call(null, file)) {
+    var _write = function (file) {
 
-                var tmp_stream = through(this.emit.bind(this, 'data'));
+        if(!!doit.call(null, file)) {
 
+            var tmp_stream = through(this.emit.bind(this, 'data'));
+
+
+
+            if(fork == false)
                 detour_child.pipe(tmp_stream);
-                detour.write(file);
 
-                tmp_stream.end();
+            detour.write(file);
 
-            } else {
-                // pass along
-                this.emit('data', file);
-            }
-        };
+            tmp_stream.end();
 
-        var _end = function() {
-            detour.end();
-            this.emit('end');
-        };
+        } else {
+            // pass along
+            this.emit('data', file);
+        }
+    };
 
-        return through(_write, _end);
-    }
+    var _end = function() {
+        detour.end();
+        this.emit('end');
+    };
 
-    if (doit) {
-        return child;
-    } else {
-        // noop
-        return through(function(data){
-            this.emit('data', data);
-        });
-    }
+    return through(_write, _end);
+
 };

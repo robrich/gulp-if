@@ -9,6 +9,18 @@ var should = require('should');
 require('mocha');
 
 describe('gulp-if', function() {
+
+    describe('when given a non-boolean value,', function() {
+        it('should throw error', function() {
+            var err = new Error('gulp-if: first param must be boolean function/expression');
+
+            // var s = gulpif([], through());
+            (function(){
+                gulpif([], through());
+            }).should.throw();
+        });
+    });
+
     describe('when given a boolean,', function() {
         var tempFile = './temp.txt';
         var tempFileContent = 'A test generated this file and it is safe to delete';
@@ -148,7 +160,7 @@ describe('gulp-if', function() {
             s.end();
         });
 
-        it('should call the function when bool function is satisfied', function(done){
+        it('should call the function when bool function satisfies', function(done){
 
             var filter = function(num) { return num % 2 == 0;};
 
@@ -176,7 +188,52 @@ describe('gulp-if', function() {
                 (collect.indexOf(2) === 1).should.equal(true);
                 (collect.indexOf(0) === 2).should.equal(true);
 
-                // done();
+            });
+
+            // Act
+            while(n-- > 0) {
+                s.write(n);
+            }
+
+            s.end();
+
+        });
+
+        it('should call the function and fork when bool function satisfies', function(done){
+
+            var filter = function(num) { return num % 2 == 0;};
+
+            var collect = [];
+
+            var stream = through(function (num) {
+                (num % 2 == 0).should.equal(true);
+                collect.push(num);
+
+                return this.queue(num);
+            });
+
+            stream.once('end', done);
+
+
+            var main_stream = through(function(num) {
+                (filter(num)).should.equal(false);
+                // main_called++;
+            })
+
+            var s = gulpif(filter, stream, true);
+
+                s.pipe(main_stream);
+
+            var n = 5;
+
+            // Assert
+            s.once('end', function(/*file*/){
+                // Test that command executed
+
+                (collect.indexOf(4) === 0).should.equal(true);
+                (collect.indexOf(2) === 1).should.equal(true);
+                (collect.indexOf(0) === 2).should.equal(true);
+
             });
 
             // Act
@@ -213,6 +270,7 @@ describe('gulp-if', function() {
             // ensure file is passed correctly
             s.pipe(through(function(data){
                 (data === fakeFile).should.equal(true);
+
 
                 (data.contents.toString() === changed_content).should.equal(true)
 
