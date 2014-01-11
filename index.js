@@ -17,7 +17,7 @@ module.exports = function (doit, child, fork) {
     }
 
     if(typeof doit === 'boolean') {
-        var _bool = !!doit;
+        var _bool = doit;
         doit = function() {
             return _bool;
         };
@@ -31,8 +31,6 @@ module.exports = function (doit, child, fork) {
         if(!!doit.call(null, file)) {
 
             var tmp_stream = through(this.emit.bind(this, 'data'));
-
-
 
             if(fork == false)
                 detour_child.pipe(tmp_stream);
