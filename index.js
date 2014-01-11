@@ -12,29 +12,32 @@ module.exports = function (doit, child) {
     // if doit is a boolean function
     if(typeof doit === 'function') {
 
-        var _write = function(file) {
+        var detour = through();
+        var detour_child = detour.pipe(child);
+
+        var _write = function (file) {
 
             if(!!doit.call(null, file)) {
 
-                this.pause();
+                var tmp_stream = through(this.emit.bind(this, 'data'));
 
-                var detour = through();
+                detour_child.pipe(tmp_stream);
+                detour.write(file);
 
-                detour.pipe(child)
-                .pipe(through(this.push));
-
-                detour.once('end', this.resume);
-
-                detour.write(file), detour.end();
+                tmp_stream.end();
 
             } else {
                 // pass along
                 this.emit('data', file);
             }
+        };
 
-        }
+        var _end = function() {
+            detour.end();
+            this.emit('end');
+        };
 
-        return through(_write);
+        return through(_write, _end);
     }
 
     if (doit) {
