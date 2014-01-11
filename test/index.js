@@ -154,13 +154,17 @@ describe('gulp-if', function() {
 
             var collect = [];
 
-            var s = gulpif(filter, through(function (num) {
+            var stream = through(function (num) {
 
                 (num % 2 == 0).should.equal(true);
                 collect.push(num);
 
                 return this.queue(num);
-            }));
+            });
+
+            stream.once('end', done);
+
+            var s = gulpif(filter, stream);
 
             var n = 5;
 
@@ -172,7 +176,7 @@ describe('gulp-if', function() {
                 (collect.indexOf(2) === 1).should.equal(true);
                 (collect.indexOf(0) === 2).should.equal(true);
 
-                done();
+                // done();
             });
 
             // Act
