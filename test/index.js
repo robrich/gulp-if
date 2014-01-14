@@ -162,7 +162,7 @@ describe('gulp-if', function() {
 
         it('should call the function when bool function satisfies', function(done){
 
-            var filter = function(num) { return num % 2 == 0;};
+            var filter = function(num) {return num % 2 == 0;};
 
             var collect = [];
 

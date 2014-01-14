@@ -28,11 +28,11 @@ module.exports = function (doit, child, fork) {
 
     var _write = function (file) {
 
-        if(!!doit.call(null, file)) {
+        if(doit(file)) {
 
             var tmp_stream = through(this.emit.bind(this, 'data'));
 
-            if(fork == false)
+            if(fork === false)
                 detour_child.pipe(tmp_stream);
 
             detour.write(file);
