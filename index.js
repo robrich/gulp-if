@@ -9,6 +9,9 @@ module.exports = function (doit, child, fork) {
         throw new Error('gulp-if: child action is required');
     }
 
+    if(typeof doit !== 'function' && typeof doit !== 'boolean')
+        throw new Error('gulp-if: first param must be boolean function/expression');
+
     var process = function(file) {
 
         if(fork !== true)
