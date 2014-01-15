@@ -5,51 +5,29 @@
 var through = require('through');
 
 module.exports = function (doit, child, fork) {
-
-    fork = !!fork;
-
     if (!child) {
         throw new Error('gulp-if: child action is required');
     }
 
-    if(typeof doit !== 'boolean' && typeof doit !== 'function') {
-        throw new Error('gulp-if: first param must be boolean function/expression');
-    }
+    var process = function(file) {
 
-    if(typeof doit === 'boolean') {
-        var _bool = doit;
-        doit = function() {
-            return _bool;
-        };
-    }
+        if(fork !== true)
+            child.on('data', this.emit.bind(this, 'data'));
 
-    var detour = through();
-    var detour_child = detour.pipe(child);
+        if ((typeof doit === 'function' && doit(file))
+            || (typeof doit ==='boolean' && doit)) {
 
-    var _write = function (file) {
-
-        if(doit(file)) {
-
-            var tmp_stream = through(this.emit.bind(this, 'data'));
-
-            if(fork === false)
-                detour_child.pipe(tmp_stream);
-
-            detour.write(file);
-
-            tmp_stream.end();
-
-        } else {
-            // pass along
-            this.emit('data', file);
+            child.write(file);
+            return;
         }
+
+        this.emit('data', file);
     };
 
-    var _end = function() {
-        detour.end();
+    var end = function() {
+        child.end();
         this.emit('end');
     };
 
-    return through(_write, _end);
-
+    return through(process, end);
 };

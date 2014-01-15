@@ -11,13 +11,47 @@ require('mocha');
 describe('gulp-if', function() {
 
     describe('when given a non-boolean value,', function() {
-        it('should throw error', function() {
-            var err = new Error('gulp-if: first param must be boolean function/expression');
+        it('should pass value', function(done) {
 
-            // var s = gulpif([], through());
-            (function(){
-                gulpif([], through());
-            }).should.throw();
+            var
+            calls = 0,
+            collect = [];
+
+            var stream = through(function (num) {
+
+                calls++;
+
+                return this.queue(num);
+            });
+
+            var s = gulpif([], stream);
+            s.on('data', function(num) {
+                collect.push(num);
+            });
+
+            var
+            n = 5,
+            m = n;
+
+            // Assert
+            s.once('end', function(/*file*/){
+                // Test that command executed
+                var o = m;
+                while(m-- > 0) {
+                    (collect.indexOf(m) === o-m-1).should.equal(true);
+                }
+
+                (calls).should.equal(0);
+                done();
+
+            });
+
+            // Act
+            while(n-- > 0) {
+                s.write(n);
+            }
+
+            s.end();
         });
     });
 
