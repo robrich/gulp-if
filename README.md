@@ -37,7 +37,9 @@ However, if `condition` is satisfied, then data from `stream A` will pipe to `st
 
 If `branch` is true, `stream B` will not pass data to `stream D`. This is useful if another stream, say `stream C`, is connected to `stream B`. Otherwise, `stream B` will pass data to `stream D` whenever `branch` is false.
 
-#### condition
+#### Parameters
+
+##### condition
 
 Type: `boolean` or `function` that returns a boolean
 
@@ -45,11 +47,11 @@ The condition parameter may be a boolean expression or a function. `condition` c
 
 If a function is given, then the function will be given a vinyl object `file`. The function should return a `boolean`. This enables `condition` to be dynamic.
 
-#### stream
+##### stream
 
 Stream for gulp-if to pipe data into. Useful when given a gulp-plugin.
 
-#### branch
+##### branch
 
 Type: `boolean`
 
