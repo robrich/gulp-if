@@ -55,11 +55,14 @@ Stream for gulp-if to pipe data into. Useful when given a gulp-plugin.
 
 Type: `boolean`
 
+Default: `False`
+
+
 `branch` controls the flow behavior of whether gulp-if should pipe `stream` back to the main stream (i.e. branching flow).
 
 If `true`, then gulp-if **will not** pipe `stream` back to the main stream. Otherwise, gulp-if will pipe `stream` back to the main stream.
 
-**Default:** False
+
 
 
 LICENSE
