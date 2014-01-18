@@ -29,7 +29,7 @@ gulp-if will pipe data to `stream` appropriately whenever `condition` is satisfi
 
 To visualize stream flow, see the following diagram:
 
-![](gulp-if/blob/master/img/flow.png)
+![](img/flow.png)
 
 If `condition` is unsatisfied, then data from `stream A` will pass onto `Stream D`.
 
