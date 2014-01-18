@@ -257,7 +257,7 @@ describe('gulp-if', function() {
 
         });
 
-        it('should call the function and fork whenever bool function satisfies', function(done){
+        it('should call the function and branch whenever bool function satisfies', function(done){
 
             var filter = function(num) { return num % 2 === 0;};
 

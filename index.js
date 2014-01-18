@@ -4,7 +4,7 @@
 
 var through = require('through');
 
-module.exports = function (doit, child, fork) {
+module.exports = function (doit, child, branch) {
     if (!child)
         throw new Error('gulp-if: child action is required');
 
@@ -13,7 +13,7 @@ module.exports = function (doit, child, fork) {
 
     var process = function(file) {
 
-        if (fork !== true)
+        if (branch !== true)
             child.once('data', this.emit.bind(this, 'data'));
 
         if ((typeof doit === 'function' && doit(file)) ||
