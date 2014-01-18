@@ -3,10 +3,10 @@
 gulp-if
 =======
 
-Conditionally run a task
+Use boolean expressions or functions to conditionally control the flow of streams.
 
-Usage
------
+
+## Usage
 
 ```javascript
 var gulpif = require('gulp-if');
@@ -16,10 +16,49 @@ var condition = true; // TODO: add business logic
 
 gulp.task('task', function() {
   gulp.src('./src/*.js')
-    .pipe(gulpif(condition, uglify())
+    .pipe(gulpif(condition, uglify()))
     .pipe(gulp.dest('./dist/'));
 });
 ```
+
+## API
+
+### gulpif(condition, stream [, branch])
+
+gulp-if will pipe data to `stream` appropriately whenever `condition` is satisfied.
+
+To visualize stream flow, see the following diagram:
+
+![](gulp-if/blob/master/img/flow.png)
+
+If `condition` is unsatisfied, then data from `stream A` will pass onto `Stream D`.
+
+However, if `condition` is satisfied, then data from `stream A` will pipe to `stream B`.
+
+If `branch` is true, `stream B` will not pass data to `stream D`. This is useful if another stream, say `stream C`, is connected to `stream B`. Otherwise, `stream B` will pass data to `stream D` whenever `branch` is false.
+
+#### condition
+
+Type: `boolean` or `function` that returns a boolean
+
+The condition parameter may be a boolean expression or a function. `condition` controls which stream to pass the `file` objects to.
+
+If a function is given, then the function will be given a vinyl object `file`. The function should return a `boolean`. This enables `condition` to be dynamic.
+
+#### stream
+
+Stream for gulp-if to pipe data into. Useful when given a gulp-plugin.
+
+#### branch
+
+Type: `boolean`
+
+`branch` controls the flow behavior of whether gulp-if should pipe `stream` back to the main stream (i.e. branching flow).
+
+If `true`, then gulp-if **will not** pipe `stream` back to the main stream. Otherwise, gulp-if will pipe `stream` back to the main stream.
+
+**Default:** False
+
 
 LICENSE
 -------
