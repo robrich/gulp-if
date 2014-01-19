@@ -41,11 +41,11 @@ If `branch` is true, `stream B` will not pass data to `stream D`. This is useful
 
 ##### condition
 
-Type: `boolean` or `function` that returns a boolean
+Type: `boolean` or [`stat`](http://nodejs.org/api/fs.html#fs_class_fs_stats) object or `function` that takes in a vinyl file and returns a boolean or `RegularExpression` that works on the `file.path`
 
-The condition parameter may be a boolean expression or a function. `condition` controls which stream to pass the `file` objects to.
+The condition parameter is any of the conditions supported by [gulp-match](https://github.com/robrich/gulp-match).  The `file.path` is passed into `gulp-match`.
 
-If a function is given, then the function will be given a vinyl object `file`. The function should return a `boolean`. This enables `condition` to be dynamic.
+If a function is given, then the function is passed a vinyl `file`. The function should return a `boolean`.
 
 ##### stream
 
@@ -55,14 +55,11 @@ Stream for gulp-if to pipe data into. Useful when given a gulp-plugin.
 
 Type: `boolean`
 
-Default: `False`
-
+Default: `false`
 
 `branch` controls the flow behavior of whether gulp-if should pipe `stream` back to the main stream (i.e. branching flow).
 
 If `true`, then gulp-if **will not** pipe `stream` back to the main stream. Otherwise, gulp-if will pipe `stream` back to the main stream.
-
-
 
 
 LICENSE
