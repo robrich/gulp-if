@@ -10,7 +10,8 @@
     "gulpplugin"
   ],
   "dependencies": {
-    "through": "~2.3.4"
+    "through": "~2.3.4",
+    "gulp-match": "~0.0.1"
   },
   "devDependencies": {
     "mocha": "*",

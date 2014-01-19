@@ -3,22 +3,20 @@
 "use strict";
 
 var through = require('through');
+var match = require('gulp-match');
 
-module.exports = function (doit, child, branch) {
-    if (!child)
+module.exports = function (condition, child, branch) {
+    if (!child) {
         throw new Error('gulp-if: child action is required');
-
-    if (typeof doit !== 'function' && typeof doit !== 'boolean')
-        throw new Error('gulp-if: first param must be boolean function/expression');
+    }
 
     var process = function(file) {
 
-        if (branch !== true)
+        if (!branch) {
             child.once('data', this.emit.bind(this, 'data'));
+        }
 
-        if ((typeof doit === 'function' && doit(file)) ||
-            (typeof doit ==='boolean' && doit)) {
-
+        if (match(file, condition)) {
             child.write(file);
             return;
         }
