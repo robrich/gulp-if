@@ -7,7 +7,9 @@
   "author": "Rob Richardson (http://robrich.org/)",
   "main": "./index.js",
   "keywords": [
-    "gulpplugin"
+    "gulpplugin",
+    "conditional",
+    "if"
   ],
   "dependencies": {
     "through": "~2.3.4",
@@ -22,7 +24,7 @@
     "test": "mocha && jshint ./*.js && jshint ./test/*.js"
   },
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.10.0"
   },
   "licenses": [
     {
