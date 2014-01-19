@@ -14,11 +14,12 @@
     "gulp-match": "~0.0.1"
   },
   "devDependencies": {
-    "mocha": "*",
-    "should": "*"
+    "jshint": "~2.4.1",
+    "mocha": "~1.17.0",
+    "should": "~3.0.1"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha && jshint ./*.js && jshint ./test/*.js"
   },
   "engines": {
     "node": ">= 0.8.0"
