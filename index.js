@@ -10,6 +10,8 @@ module.exports = function (condition, child, branch) {
         throw new Error('gulp-if: child action is required');
     }
 
+    child.setMaxListeners(0);
+    
     var process = function(file) {
 
         if (!branch) {

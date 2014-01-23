@@ -67,6 +67,26 @@ describe('gulp-if', function() {
 		});
 
 	});
+  
+  // http://nodejs.org/api/events.html#events_emitter_setmaxlisteners_n
+	it('should not warn for >10 listeners', function() {
+		var child = through(function() {});
+		var s = gulpif(true, child);
+
+		function write(n) {
+			s.write({
+				path: 'path/'+n,
+				content: new Buffer(' '+n)
+			});
+		}
+
+		for (var n=0; n<11; n++) {
+			write(n);
+		}
+		//ajoslin: Only way I could find to test this warning
+		//https://github.com/joyent/node/blob/master/test/simple/test-event-emitter-check-listener-leaks.js#L32
+		should.not.exist(child._events.data.warned);
+	});
 
 
 });
