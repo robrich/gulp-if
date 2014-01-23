@@ -66,6 +66,20 @@ describe('gulp-if', function() {
 			done();
 		});
 
+		it('should not listen for child events if test does not match', function() {
+			var called = 0;
+			var child = through();
+			child.once = function() { called++; };
+			var s = gulpif(/pass/, child);
+
+			s.write({ path: 'pass', content: new Buffer('test') });
+			called.should.equal(1);
+			s.write({ path: 'fail', content: new Buffer('test') });
+			called.should.equal(1);
+			s.write({ path: 'pass', content: new Buffer('test') });
+			called.should.equal(2);
+		});
+
 	});
 
 
