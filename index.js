@@ -12,11 +12,10 @@ module.exports = function (condition, child, branch) {
 
     var process = function(file) {
 
-        if (!branch) {
-            child.once('data', this.emit.bind(this, 'data'));
-        }
-
         if (match(file, condition)) {
+            if (!branch) {
+                child.once('data', this.emit.bind(this, 'data'));
+            }
             child.write(file);
             return;
         }
