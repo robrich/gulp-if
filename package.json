@@ -12,13 +12,13 @@
     "if"
   ],
   "dependencies": {
-    "through": "~2.3.4",
-    "gulp-match": "~0.0.1"
+    "through2": "~0.4.1",
+    "gulp-match": "~0.0.2"
   },
   "devDependencies": {
-    "jshint": "~2.4.1",
-    "mocha": "~1.17.0",
-    "should": "~3.0.1"
+    "jshint": "~2.4.3",
+    "mocha": "~1.17.1",
+    "should": "~3.1.2"
   },
   "scripts": {
     "test": "mocha && jshint ./*.js && jshint ./test/*.js"

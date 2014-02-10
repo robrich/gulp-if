@@ -2,33 +2,73 @@
 
 "use strict";
 
-var through = require('through');
+var through2 = require('through2');
 var match = require('gulp-match');
 
-module.exports = function (condition, child, branch) {
-    if (!child) {
-        throw new Error('gulp-if: child action is required');
-    }
+module.exports = function (condition, trueChild, falseChild) {
+	if (!trueChild) {
+		throw new Error('gulp-if: child action is required');
+	}
 
-    child.setMaxListeners(0);
-    
-    var process = function(file) {
+	trueChild.setMaxListeners(0);
+	if (falseChild) {
+		falseChild.setMaxListeners(0);
+	}
 
-        if (match(file, condition)) {
-            if (!branch) {
-                child.once('data', this.emit.bind(this, 'data'));
-            }
-            child.write(file);
-            return;
-        }
+	var emitToChild = function (file, stream) {
+		this.pause();
+		stream.once('data', function(fileOut) {
+			this.push(fileOut); // child is done, send it downstream
+			this.resume();
+		}.bind(this));
+		stream.write(file);
+	};
 
-        this.emit('data', file);
-    };
+	var process = function(file, enc, cb) {
 
-    var end = function() {
-        child.end();
-        this.emit('end');
-    };
+		if (match(file, condition)) {
+			// send to truthy stream
+			emitToChild(file, trueChild);
+		} else if (falseChild) {
+			// send to falsey stream
+			emitToChild(file, falseChild);
+		} else {
+			// no child wanted it, send it downstream
+			this.push(file);
+		}
+		cb();
+	};
 
-    return through(process, end);
+	var end = function(cb) {
+		// let them tell me when they're done and then I'll emit end too
+
+		var trueEnded = false;
+		var falseEnded = !falseChild; // if there is no false child stream, it's already ended
+
+		// this stream is done when both children end
+		var emitEnd = function () {
+			if (trueEnded && falseEnded) {
+				cb();
+			}
+		};
+
+		trueChild.on('end', function () {
+			trueEnded = true;
+			emitEnd();
+		}.bind(this));
+		if (falseChild) {
+			falseChild.on('end', function () {
+				falseEnded = true;
+				emitEnd();
+			}.bind(this));
+		}
+
+		trueChild.end();
+		if (falseChild) {
+			falseChild.end();
+		}
+	
+	};
+
+	return through2.obj(process, end);
 };
