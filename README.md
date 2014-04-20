@@ -1,12 +1,15 @@
-![status](https://secure.travis-ci.org/robrich/gulp-if.png?branch=master)
-
-gulp-if
+gulp-if ![status](https://secure.travis-ci.org/robrich/gulp-if.png?branch=master)
 =======
 
-Use boolean expressions or functions to conditionally control the flow of streams.
-
+A ternary gulp plugin: conditionally control the flow of vinyl objects.
 
 ## Usage
+
+1: Conditionally filter content
+
+**Condition**
+
+![][condition]
 
 ```javascript
 var gulpif = require('gulp-if');
@@ -20,22 +23,87 @@ gulp.task('task', function() {
     .pipe(gulp.dest('./dist/'));
 });
 ```
+Only uglify the content if the condition is true
 
-## API
 
-### gulpif(condition, stream [, branch])
+2: Ternary filter
 
-gulp-if will pipe data to `stream` appropriately whenever `condition` is satisfied.
+**Ternary**
 
-To visualize stream flow, see the following diagram:
+![][ternary]
 
-![](img/flow.png)
+```javascript
+var gulpif = require('gulp-if');
+var uglify = require('gulp-uglify');
+var beautify = require('gulp-beautify');
 
-If `condition` is unsatisfied, then data from `stream A` will pass onto `Stream D`.
+var condition = function (file) {
+  // TODO: add business logic
+  return true;
+}
 
-However, if `condition` is satisfied, then data from `stream A` will pipe to `stream B`.
+gulp.task('task', function() {
+  gulp.src('./src/*.js')
+    .pipe(gulpif(condition, uglify(), beautify()))
+    .pipe(gulp.dest('./dist/'));
+});
+```
 
-If `branch` is true, `stream B` will not pass data to `stream D`. This is useful if another stream, say `stream C`, is connected to `stream B`. Otherwise, `stream B` will pass data to `stream D` whenever `branch` is false.
+If condition returns true, uglify else beautify
+
+
+3: Remove things from the stream
+
+**Remove from here on**
+
+![][exclude]
+
+```javascript
+var gulpexclude = require('gulp-exclude');
+var uglify = require('gulp-uglify');
+var jshint = require('gulp-jshint');
+
+var condition = './gulpfile.js';
+
+gulp.task('task', function() {
+  gulp.src('./*.js')
+    .pipe(jshint())
+    .pipe(gulpexclude(condition))
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist/'));
+});
+```
+
+Run JSHint on everything, remove gulpfile from the stream, then uglify and write everything else.
+
+
+4: Exclude things from the stream
+
+![][glob]
+
+```javascript
+var uglify = require('gulp-uglify');
+
+gulp.task('task', function() {
+  gulp.src(['./*.js', '!./node_modules/**'])
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist/'));
+});
+```
+
+Grab all JavaScript files that aren't in the node_modules folder, uglify them, and write them.
+This is fastest because nothing in node_modules ever leaves `gulp.src()`
+
+
+## gulp-if API
+
+### gulpif(condition, stream [, elseStream])
+
+gulp-if will pipe data to `stream` whenever `condition` is truthy.
+
+If `condition` is falsey and `elseStream` is passed, data will pipe to `elseStream`
+
+After data is piped to `stream` or `elseStream` or neither, data is piped down-stream.
 
 #### Parameters
 
@@ -49,17 +117,11 @@ If a function is given, then the function is passed a vinyl `file`. The function
 
 ##### stream
 
-Stream for gulp-if to pipe data into. Useful when given a gulp-plugin.
+Stream for gulp-if to pipe data into when conditon is truthy.
 
-##### branch
+##### elseStream
 
-Type: `boolean`
-
-Default: `false`
-
-`branch` controls the flow behavior of whether gulp-if should pipe `stream` back to the main stream (i.e. branching flow).
-
-If `true`, then gulp-if **will not** pipe `stream` back to the main stream. Otherwise, gulp-if will pipe `stream` back to the main stream.
+Optional, Stream for gulp-if to pipe data into when condition is falsey.
 
 
 LICENSE
@@ -87,3 +149,8 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[condition]: https://rawgithub.com/robrich/gulp-if/master/img/condition.svg
+[ternary]: https://rawgithub.com/robrich/gulp-if/master/img/ternary.svg
+[exclude]: https://rawgithub.com/robrich/gulp-if/master/img/exclude.svg
+[glob]: https://rawgithub.com/robrich/gulp-if/master/img/glob.svg

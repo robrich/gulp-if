@@ -1,12 +1,11 @@
-/*jshint node:true */
 /*global describe:false, it:false */
 
-"use strict";
+'use strict';
 
 var gulpif = require('../');
-var through = require('through');
+
+var through = require('through2');
 var should = require('should');
-require('mocha');
 
 describe('gulp-if', function() {
 
@@ -24,11 +23,13 @@ describe('gulp-if', function() {
 				contents: new Buffer(tempFileContent)
 			};
 
-			var s = gulpif(condition, new through(function (data) {
+			var s = gulpif(condition, new through.obj(function (data, enc, cb) {
 
 				// Should never be invoked
 				called++;
-				this.emit(data);
+
+				this.push(data);
+				cb();
 			}));
 
 			// Assert
@@ -66,41 +67,5 @@ describe('gulp-if', function() {
 			done();
 		});
 
-		it('should not listen for child events if test does not match', function() {
-			var called = 0;
-			var child = through();
-			child.once = function() { called++; };
-			var s = gulpif(/pass/, child);
-
-			s.write({ path: 'pass', content: new Buffer('test') });
-			called.should.equal(1);
-			s.write({ path: 'fail', content: new Buffer('test') });
-			called.should.equal(1);
-			s.write({ path: 'pass', content: new Buffer('test') });
-			called.should.equal(2);
-		});
-
 	});
-  
-  // http://nodejs.org/api/events.html#events_emitter_setmaxlisteners_n
-	it('should not warn for >10 listeners', function() {
-		var child = through(function() {});
-		var s = gulpif(true, child);
-
-		function write(n) {
-			s.write({
-				path: 'path/'+n,
-				content: new Buffer(' '+n)
-			});
-		}
-
-		for (var n=0; n<11; n++) {
-			write(n);
-		}
-		//ajoslin: Only way I could find to test this warning
-		//https://github.com/joyent/node/blob/master/test/simple/test-event-emitter-check-listener-leaks.js#L32
-		should.not.exist(child._events.data.warned);
-	});
-
-
 });

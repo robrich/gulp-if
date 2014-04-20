@@ -1,12 +1,11 @@
-/*jshint node:true */
 /*global describe:false, it:false */
 
-"use strict";
+'use strict';
 
 var gulpif = require('../');
-var through = require('through');
+
+var through = require('through2');
 require('should');
-require('mocha');
 
 describe('gulp-if', function() {
 
@@ -23,12 +22,13 @@ describe('gulp-if', function() {
 				contents: new Buffer(tempFileContent)
 			};
 
-			var s = gulpif(condition, through(function (file) {
+			var s = gulpif(condition, through.obj(function (file, enc, cb) {
 				// Test that file got passed through
 				(file === fakeFile).should.equal(true);
 
 				called++;
-				return this.queue(file);
+				this.push(file);
+				cb();
 			}));
 
 			// Assert
@@ -53,13 +53,14 @@ describe('gulp-if', function() {
 				contents: new Buffer(tempFileContent)
 			};
 
-			var s = gulpif(condition, through(function (file) {
+			var s = gulpif(condition, through.obj(function (file, enc, cb) {
 
 				// Test that file got passed through
 				(file === fakeFile).should.equal(true);
 
 				called++;
-				return this.queue(file);
+				this.push(file);
+				cb();
 			}));
 
 			// Assert

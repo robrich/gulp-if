@@ -1,15 +1,14 @@
-/*jshint node:true */
 /*global describe:false, it:false */
 
-"use strict";
+'use strict';
 
 var gulpif = require('../');
-var through = require('through');
+
+var through = require('through2');
 require('should');
-require('mocha');
 
 describe('gulp-if', function() {
-	describe('when given a boolean function,', function() {
+	describe('when given a function,', function() {
 		var tempFile = './temp.txt';
 		var tempFileContent = 'A test generated this file and it is safe to delete';
 
@@ -19,13 +18,14 @@ describe('gulp-if', function() {
 
 			var collect = [];
 
-			var stream = through(function (file) {
+			var stream = through.obj(function (file, enc, cb) {
 				var num = file.path;
 
 				(num % 2).should.equal(0);
 				collect.push(num);
 
-				return this.queue(file);
+				this.push(file);
+				cb();
 			});
 
 			var s = gulpif(filter, stream);
@@ -36,58 +36,6 @@ describe('gulp-if', function() {
 			s.once('end', function(){
 
 				// Test that command executed
-				collect.length.should.equal(3);
-				collect.indexOf(4).should.equal(0);
-				collect.indexOf(2).should.equal(1);
-				collect.indexOf(0).should.equal(2);
-				done();
-			});
-
-			// Act
-			while(n > 0) {
-				n--;
-				s.write({
-					path:n
-				});
-			}
-
-			s.end();
-		});
-
-		it('should call the function and branch whenever bool function satisfies', function(done){
-
-			var filter = function(file) { return file.path % 2 === 0; };
-
-			var collect = [];
-
-			var stream = through(function (file) {
-				var num = file.path;
-
-				(num % 2).should.equal(0);
-				collect.push(num);
-
-				return this.queue(file);
-			});
-
-
-			var mainStream = through(function(num) {
-				filter(num).should.equal(false);
-			});
-
-			var s = gulpif(filter, stream, true);
-
-				s.pipe(mainStream);
-
-			var n = 5;
-
-			// Assert
-			s.on('data', function(data) {
-				filter(data).should.equal(false);
-			});
-
-			s.once('end', function(){
-				// Test that command executed
-
 				collect.length.should.equal(3);
 				collect.indexOf(4).should.equal(0);
 				collect.indexOf(2).should.equal(1);
@@ -117,7 +65,7 @@ describe('gulp-if', function() {
 
 			var changedContent = 'changed_content';
 
-			var s = gulpif(condition, through(function (file) {
+			var s = gulpif(condition, through.obj(function (file, enc, cb) {
 
 				// Test that file got passed through
 				file.should.equal(fakeFile);
@@ -127,17 +75,20 @@ describe('gulp-if', function() {
 				// do simple file transform
 				file.contents = new Buffer(changedContent);
 
-				return this.queue(file);
+				this.push(file);
+				cb();
 			}));
 
 			// ensure file is passed correctly
-			s.pipe(through(function(data){
+			s.pipe(through.obj(function(data, enc, cb){
 
 				data.should.equal(fakeFile);
 				data.contents.toString().should.equal(changedContent);
 
 				called++;
-				return this.queue(data);
+
+				this.push(data);
+				cb();
 			}));
 
 			// Assert
@@ -163,13 +114,15 @@ describe('gulp-if', function() {
 				contents: new Buffer(tempFileContent)
 			};
 
-			var s = gulpif(condition, through(function (file) {
+			var s = gulpif(condition, through.obj(function (file, enc, cb) {
 
 				// Test that file got passed through
 				file.should.equal(fakeFile);
 
 				called++;
-				return this.queue(file);
+
+				this.push(file);
+				cb();
 			}));
 
 			// Assert
