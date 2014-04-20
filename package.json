@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "ternary-stream": "^1.0.0",
-    "gulp-match": "^0.0.2"
+    "gulp-match": "^0.0.3"
   },
   "devDependencies": {
     "jshint": "^2.5.0",

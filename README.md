@@ -23,7 +23,7 @@ gulp.task('task', function() {
     .pipe(gulp.dest('./dist/'));
 });
 ```
-Only uglify the content if the condition is true
+Only uglify the content if the condition is true, but send all the files to the dist folder
 
 
 2: Ternary filter
@@ -49,7 +49,7 @@ gulp.task('task', function() {
 });
 ```
 
-If condition returns true, uglify else beautify
+If condition returns true, uglify else beautify, then send everything to the dist folder
 
 
 3: Remove things from the stream
@@ -59,7 +59,7 @@ If condition returns true, uglify else beautify
 ![][exclude]
 
 ```javascript
-var gulpexclude = require('gulp-exclude');
+var gulpIgnore = require('gulp-ignore');
 var uglify = require('gulp-uglify');
 var jshint = require('gulp-jshint');
 
@@ -68,7 +68,7 @@ var condition = './gulpfile.js';
 gulp.task('task', function() {
   gulp.src('./*.js')
     .pipe(jshint())
-    .pipe(gulpexclude(condition))
+    .pipe(gulpIgnore.exclude(condition))
     .pipe(uglify())
     .pipe(gulp.dest('./dist/'));
 });
@@ -78,6 +78,8 @@ Run JSHint on everything, remove gulpfile from the stream, then uglify and write
 
 
 4: Exclude things from the stream
+
+**Exclude things from entering the stream**
 
 ![][glob]
 
