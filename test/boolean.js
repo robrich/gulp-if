@@ -32,7 +32,7 @@ describe('gulp-if', function() {
 			}));
 
 			// Assert
-			s.once('end', function(){
+			s.once('finish', function(){
 
 				// Test that command executed
 				called.should.equal(1);
@@ -64,7 +64,7 @@ describe('gulp-if', function() {
 			}));
 
 			// Assert
-			s.once('end', function(){
+			s.once('finish', function(){
 
 				// Test that command executed
 				called.should.equal(0);

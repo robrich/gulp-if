@@ -33,7 +33,7 @@ describe('gulp-if', function() {
 			var n = 5;
 
 			// Assert
-			s.once('end', function(){
+			s.once('finish', function(){
 
 				// Test that command executed
 				collect.length.should.equal(3);
@@ -92,7 +92,7 @@ describe('gulp-if', function() {
 			}));
 
 			// Assert
-			s.once('end', function(){
+			s.once('finish', function(){
 
 				// Test that command executed
 				called.should.equal(2);
@@ -126,7 +126,7 @@ describe('gulp-if', function() {
 			}));
 
 			// Assert
-			s.once('end', function(){
+			s.once('finish', function(){
 
 				// Test that command executed
 				called.should.equal(0);
