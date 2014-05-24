@@ -3,6 +3,8 @@ gulp-if ![status](https://secure.travis-ci.org/robrich/gulp-if.png?branch=master
 
 A ternary gulp plugin: conditionally control the flow of vinyl objects.
 
+**Note**: Badly behaved plugins can often get worse when used with gulp-if.  TYpically the fix is not in gulp-if.
+
 ## Usage
 
 1: Conditionally filter content
