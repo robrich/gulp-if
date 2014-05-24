@@ -3,7 +3,9 @@ gulp-if ![status](https://secure.travis-ci.org/robrich/gulp-if.png?branch=master
 
 A ternary gulp plugin: conditionally control the flow of vinyl objects.
 
-**Note**: Badly behaved plugins can often get worse when used with gulp-if.  TYpically the fix is not in gulp-if.
+**Note**: Badly behaved plugins can often get worse when used with gulp-if.  Typically the fix is not in gulp-if.
+
+**Note**: Works great with [lazypipe](https://github.com/OverZealous/lazypipe), see below
 
 ## Usage
 
@@ -97,6 +99,33 @@ gulp.task('task', function() {
 
 Grab all JavaScript files that aren't in the node_modules folder, uglify them, and write them.
 This is fastest because nothing in node_modules ever leaves `gulp.src()`
+
+
+## works great with [lazypipe](https://github.com/OverZealous/lazypipe)
+
+Lazypipe creates a function that initializes the pipe chain on use.  This allows you to create a chain of events inside the gulp-if condition.  This scenario will run jshint analysis and reporter only if the linting flag is true.
+
+```js
+var gulpif = require('gulp-if');
+var jshint = require('gulp-jshint');
+var uglify = require('gulp-uglify');
+
+var linting = false;
+var compressing = false;
+
+var jshintChannel = lazypipe()
+  .pipe(jshint())
+  .pipe(jshint.reporter())
+  .pipe(jshint.reporter('fail'));
+
+gulp.task('scripts', function () {
+  return gulp.src(paths.scripts.src)
+    .pipe(gulpif(linting, jshintChannel()))
+    .pipe(gulpif(compressing, uglify()))
+    .pipe(gulp.dest(paths.scripts.dest));
+});
+```
+[source](https://github.com/spenceralger/gulp-jshint/issues/38#issuecomment-40423932)
 
 
 ## gulp-if API
