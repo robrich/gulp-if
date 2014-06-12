@@ -114,9 +114,11 @@ var linting = false;
 var compressing = false;
 
 var jshintChannel = lazypipe()
-  .pipe(jshint())
-  .pipe(jshint.reporter())
-  .pipe(jshint.reporter('fail'));
+  // adding a pipeline step
+  .pipe(jshint) // notice the stream function has not been called!
+  .pipe(jshint.reporter)
+  // adding a step with an argument
+  .pipe(jshint.reporter, 'fail');
 
 gulp.task('scripts', function () {
   return gulp.src(paths.scripts.src)
