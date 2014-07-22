@@ -1,7 +1,7 @@
 {
   "name": "gulp-if",
   "description": "Conditionally run a task",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "homepage": "https://github.com/robrich/gulp-if",
   "repository": "git://github.com/robrich/gulp-if.git",
   "author": "Rob Richardson (http://robrich.org/)",

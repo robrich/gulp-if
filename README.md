@@ -129,6 +129,40 @@ gulp.task('scripts', function () {
 ```
 [source](https://github.com/spenceralger/gulp-jshint/issues/38#issuecomment-40423932)
 
+## works great inside [lazypipe](https://github.com/OverZealous/lazypipe)
+
+Lazypipe assumes that all function parameters are static, gulp-if arguments need to be instantiated inside each lazypipe.  This difference can be easily solved by passing a function on the lazypipe step
+
+```js
+var gulpif = require('gulp-if');
+var jshint = require('gulp-jshint');
+var uglify = require('gulp-uglify');
+
+var compressing = false;
+
+var jsChannel = lazypipe()
+  // adding a pipeline step
+  .pipe(jshint) // notice the stream function has not been called!
+  .pipe(jshint.reporter)
+  // adding a step with an argument
+  .pipe(jshint.reporter, 'fail')
+  // you can't say: .pipe(gulpif, compressing, uglify)
+  // because uglify needs to be instantiated separately in each lazypipe instance
+  // you can say this instead:
+  .pipe(function () {
+    return gulpif(compressing, uglify());
+  });
+  // why does this work? lazypipe calls the function, passing in the no arguments to it,
+  // it instantiates a new gulp-if pipe and returns it to lazypipe.
+
+gulp.task('scripts', function () {
+  return gulp.src(paths.scripts.src)
+    .pipe(jsChannel())
+    .pipe(gulp.dest(paths.scripts.dest));
+});
+```
+
+[source](https://github.com/robrich/gulp-if/issues/32)
 
 ## gulp-if API
 
