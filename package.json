@@ -13,7 +13,7 @@
     "ternary"
   ],
   "dependencies": {
-    "gulp-match": "~0.2.0",
+    "gulp-match": "~0.2.1",
     "ternary-stream": "^1.2.0",
     "through2": "~0.6.2"
   },
@@ -23,7 +23,7 @@
     "should": "^4.0.4"
   },
   "scripts": {
-    "test": "mocha && jshint ./index.js && jshint ./test/."
+    "test": "mocha && jshint ./index.js ./test/."
   },
   "engines": {
     "node": ">= 0.10.0"

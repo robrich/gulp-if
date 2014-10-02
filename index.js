@@ -18,6 +18,6 @@ module.exports = function (condition, trueChild, falseChild) {
 	function classifier (file) {
 		return !!match(file, condition);
 	}
-	
+
 	return ternaryStream(classifier, trueChild, falseChild);
 };
