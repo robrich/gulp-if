@@ -28,10 +28,5 @@
   "engines": {
     "node": ">= 0.10.0"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/robrich/gulp-if/raw/master/LICENSE"
-    }
-  ]
+  "license": "MIT"
 }
