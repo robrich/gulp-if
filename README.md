@@ -186,7 +186,7 @@ If a function is given, then the function is passed a vinyl `file`. The function
 
 ##### stream
 
-Stream for gulp-if to pipe data into when conditon is truthy.
+Stream for gulp-if to pipe data into when condition is truthy.
 
 ##### elseStream
 
