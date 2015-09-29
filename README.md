@@ -166,7 +166,7 @@ gulp.task('scripts', function () {
 
 ## gulp-if API
 
-### gulpif(condition, stream [, elseStream])
+### gulpif(condition, stream [, elseStream, [, minimatchOptions]])
 
 gulp-if will pipe data to `stream` whenever `condition` is truthy.
 
@@ -191,6 +191,10 @@ Stream for gulp-if to pipe data into when condition is truthy.
 ##### elseStream
 
 Optional, Stream for gulp-if to pipe data into when condition is falsey.
+
+##### minimatchOptions
+
+Optional, if it's a glob condition, these options are passed to [https://github.com/isaacs/minimatch](minimatch).
 
 
 LICENSE

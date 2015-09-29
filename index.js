@@ -4,7 +4,7 @@ var match = require('gulp-match');
 var ternaryStream = require('ternary-stream');
 var through2 = require('through2');
 
-module.exports = function (condition, trueChild, falseChild) {
+module.exports = function (condition, trueChild, falseChild, minimatchOptions) {
 	if (!trueChild) {
 		throw new Error('gulp-if: child action is required');
 	}
@@ -16,7 +16,7 @@ module.exports = function (condition, trueChild, falseChild) {
 	}
 
 	function classifier (file) {
-		return !!match(file, condition);
+		return !!match(file, condition, minimatchOptions);
 	}
 
 	return ternaryStream(classifier, trueChild, falseChild);
