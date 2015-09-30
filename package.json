@@ -13,8 +13,8 @@
     "ternary"
   ],
   "dependencies": {
-    "gulp-match": "~0.2.1",
-    "ternary-stream": "^1.2.0",
+    "gulp-match": "^1.0.0",
+    "ternary-stream": "^2.0.0",
     "through2": "^2.0.0"
   },
   "devDependencies": {
