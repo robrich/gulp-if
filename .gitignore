@@ -7,3 +7,4 @@ components
 *.orig
 .idea
 temp.txt*
+fixture

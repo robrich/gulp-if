@@ -18,9 +18,15 @@
     "through2": "^2.0.0"
   },
   "devDependencies": {
+    "end-of-stream": "^1.1.0",
+    "graceful-fs": "^4.1.2",
     "jshint": "^2.8.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^2.3.3",
-    "should": "^7.1.0"
+    "rimraf": "^2.4.3",
+    "should": "^7.1.0",
+    "stream-exhaust": "^1.0.1",
+    "vinyl-fs": "^2.1.1"
   },
   "scripts": {
     "test": "mocha && jshint ."
