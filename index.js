@@ -8,6 +8,8 @@ module.exports = function (condition, trueChild, falseChild, minimatchOptions) {
 	if (!trueChild) {
 		throw new Error('gulp-if: child action is required');
 	}
+	
+	if (!condition) condition = false;
 
 	if (typeof condition === 'boolean') {
 		// no need to evaluate the condition for each file
