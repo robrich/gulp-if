@@ -109,6 +109,7 @@ Lazypipe creates a function that initializes the pipe chain on use.  This allows
 var gulpif = require('gulp-if');
 var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
+var lazypipe = require('lazypipe');
 
 var linting = false;
 var compressing = false;
@@ -137,6 +138,7 @@ Lazypipe assumes that all function parameters are static, gulp-if arguments need
 var gulpif = require('gulp-if');
 var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
+var lazypipe = require('lazypipe');
 
 var compressing = false;
 
