@@ -196,7 +196,7 @@ Optional, Stream for gulp-if to pipe data into when condition is falsey.
 
 ##### minimatchOptions
 
-Optional, if it's a glob condition, these options are passed to [https://github.com/isaacs/minimatch](minimatch).
+Optional, if it's a glob condition, these options are passed to [minimatch](https://github.com/isaacs/minimatch).
 
 
 LICENSE
