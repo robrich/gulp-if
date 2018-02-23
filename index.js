@@ -14,7 +14,7 @@ function lazyTransform (lazyFn) {
 }
 
 function lazify (lazyFn) {
-	return ( !lazyFn || lazyFn._transform ) ? lazyFn : lazyTransform (lazyFn);
+	return ( typeof lazyFn === 'function' && !lazyFn._transform ) ? lazyTransform (lazyFn) : lazyFn;
 }
 
 module.exports = function (condition, trueChild, falseChild, minimatchOptions) {
