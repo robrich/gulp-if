@@ -7,8 +7,8 @@ var through2 = require('through2');
 function lazyTransform (lazyFn) {
 	var fnCached;
 	var transform = function () {
-		var fn = fnCached || lazyFn ();
 		fn._transform.apply ( fn, arguments );
+		var fn = fnCached || ( fnCached = lazyFn () );
 	};
 	return through2.obj(transform);
 }
