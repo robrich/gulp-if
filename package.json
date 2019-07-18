@@ -1,7 +1,7 @@
 {
   "name": "gulp-if",
   "description": "Conditionally run a task",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "homepage": "https://github.com/robrich/gulp-if",
   "repository": "git://github.com/robrich/gulp-if.git",
   "author": "Rob Richardson (http://robrich.org/)",
@@ -13,26 +13,23 @@
     "ternary"
   ],
   "dependencies": {
-    "gulp-match": "^1.0.3",
-    "ternary-stream": "^2.0.1",
-    "through2": "^2.0.1"
+    "gulp-match": "^1.1.0",
+    "ternary-stream": "^3.0.0",
+    "through2": "^3.0.1"
   },
   "devDependencies": {
-    "end-of-stream": "^1.1.0",
-    "graceful-fs": "^4.1.10",
-    "jshint": "^2.9.4",
+    "end-of-stream": "^1.4.1",
+    "graceful-fs": "^4.2.0",
+    "jshint": "^2.10.2",
     "mkdirp": "^0.5.1",
-    "mocha": "^3.1.2",
-    "rimraf": "^2.5.4",
-    "should": "^11.1.1",
-    "stream-exhaust": "^1.0.1",
-    "vinyl-fs": "^2.4.4"
+    "mocha": "^6.1.4",
+    "rimraf": "^2.6.3",
+    "should": "^13.2.3",
+    "stream-exhaust": "^1.0.2",
+    "vinyl-fs": "^3.0.3"
   },
   "scripts": {
     "test": "mocha && jshint ."
-  },
-  "engines": {
-    "node": ">= 0.10.0"
   },
   "license": "MIT"
 }
